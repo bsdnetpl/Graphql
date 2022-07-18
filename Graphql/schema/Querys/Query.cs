@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-namespace Graphql.schema
+namespace Graphql.schema.Querys
 {
     public class Query
     {
@@ -34,13 +34,13 @@ namespace Graphql.schema
             return _courseFaker.Generate(5);
         }
 
-        public async Task<CourseType> GetCourseByIdAsync(Guid Id)
+        public async Task<CourseType> GetCourseByIdAsync(Guid id)
         {
             await Task.Delay(1000);
             CourseType course = _courseFaker.Generate();
-            course.id = Id;
+            course.id = id;
             return course;
         }
-        //public string info => "Hello world !";
+        public string info => "Hello world !";
     }
 }
