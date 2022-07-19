@@ -9,30 +9,35 @@ namespace Graphql.schema.Mutations
         {
             _course = new List<CourseResult>();
         }
-        public CourseResult CreateCourse(string name, Subject subject, Guid instructorid)
+        public CourseResult CreateCourse(CourseInputType courseInputType)
         {
             CourseResult courseType = new CourseResult() //return value
             {
                 Id = Guid.NewGuid(),
-                Name = name,
-                Subject = subject,
-                InstructorId = instructorid
+                Name = courseInputType.Name,
+                Subject = courseInputType.Subject,
+                InstructorId = courseInputType.InstructorId
   
             };
             _course.Add(courseType);
             return courseType;
         }
-        public CourseResult UpdateCourse(Guid id,string name, Subject subject, Guid instructorid)
+        public CourseResult UpdateCourse(Guid id, CourseInputType courseInputType)
         {
             CourseResult course =_course.FirstOrDefault(c => c.Id == id);
             if(course == null)
             {
-                throw new Exception("Course nor found");
+                throw new GraphQLException(new Error("Course not Found", "COURSE_NOT_FOUND"));
+                //throw new Exception("Course not found");
             }
-            course.Name = name;
-            course.Subject = subject;
-            course.InstructorId = instructorid;
+            course.Name = courseInputType.Name;
+            course.Subject = courseInputType.Subject;
+            course.InstructorId = courseInputType.InstructorId;
             return course;
+        }
+        public bool DeleteCourse(Guid id)
+        {
+            return _course.RemoveAll(c => c.Id == id) >= 1;
         }
     }
 }
