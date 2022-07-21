@@ -7,10 +7,12 @@ namespace Graphql.schema.Mutations
     public class Mutation
     {
         private readonly List<CourseResult> _course;
+        //------------------------------------------------------------------------------------------------------------------------------------------------
         public Mutation()
         {
             _course = new List<CourseResult>();
         }
+        //------------------------------------------------------------------------------------------------------------------------------------------------
         public async Task<CourseResult> CreateCourse(CourseInputType courseInputType, [Service] ITopicEventSender topicEventSender)
         {
             CourseResult course = new CourseResult() //return value
@@ -22,10 +24,10 @@ namespace Graphql.schema.Mutations
   
             };
             _course.Add(course);
-            topicEventSender.SendAsync(nameof(Subscription.Subscription.CourseCreated),course);
+            topicEventSender.SendAsync(nameof(Subscription.Subscription.CourseCreated),course);//subscription
             return course;
         }
-        //----------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------------------------------------
         public async Task<CourseResult> UpdateCourse(Guid id, CourseInputType courseInputType, [Service] ITopicEventSender topicEventSender)
         {
             CourseResult course =_course.FirstOrDefault(c => c.Id == id);
@@ -38,13 +40,15 @@ namespace Graphql.schema.Mutations
             course.Subject = courseInputType.Subject;
             course.InstructorId = courseInputType.InstructorId;
 
-            string updateCourseTopic = $"{course.Id} {nameof(Subscription.Subscription.CourseUpdate)}";
+            string updateCourseTopic = $"{course.Id} {nameof(Subscription.Subscription.CourseUpdate)}";//subscription
             await topicEventSender.SendAsync(updateCourseTopic, course);
             return course;
         }
+        //------------------------------------------------------------------------------------------------------------------------------------------------
         public bool DeleteCourse(Guid id)
         {
             return _course.RemoveAll(c => c.Id == id) >= 1;
         }
+        //------------------------------------------------------------------------------------------------------------------------------------------------
     }
 }

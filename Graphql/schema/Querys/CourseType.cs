@@ -1,11 +1,8 @@
-﻿namespace Graphql.schema.Querys
+﻿using Graphql.Models;
+
+namespace Graphql.schema.Querys
 {
-    public enum Subject
-    {
-        Matematyka,
-        Angielski,
-        Historia
-    }
+
     public class CourseType
     {
         public Guid id { get; set; }
